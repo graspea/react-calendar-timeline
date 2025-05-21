@@ -130,12 +130,12 @@ class ScrollElement extends Component<Props, State> {
 
   handleTouchStart = (e: PointerEvent) => {
     if (e.isPrimary) {
-      e.preventDefault()
+      //e.preventDefault()
       this.lastTouchDistance = null
       this.singleTouchStart = { x: e.clientX, y: e.clientY, screenY: window.scrollY }
       this.lastSingleTouch = { x: e.clientX, y: e.clientY, screenY: window.scrollY }
     } else {
-      e.preventDefault()
+      //e.preventDefault()
       this.lastTouchDistance = Math.abs(e.clientX - this.singleTouchStart!.x)
       this.singleTouchStart = null
       this.lastSingleTouch = null
@@ -145,11 +145,11 @@ class ScrollElement extends Component<Props, State> {
   handleTouchMove = (e: PointerEvent) => {
     const { width, onZoom } = this.props
     if (this.isItemInteraction) {
-      e.preventDefault()
+      //e.preventDefault()
       return
     }
     if (this.lastTouchDistance && !e.isPrimary) {
-      e.preventDefault()
+      //e.preventDefault()
       const touchDistance = Math.abs(e.clientX - this.singleTouchStart!.x)
       const parentPosition = getParentPosition(e.currentTarget as HTMLElement)
       const xPosition = (e.clientX + this.singleTouchStart!.x) / 2 - parentPosition.x
@@ -158,21 +158,21 @@ class ScrollElement extends Component<Props, State> {
         this.lastTouchDistance = touchDistance
       }
     } else if (this.lastSingleTouch && e.isPrimary) {
-      e.preventDefault()
-      const x = e.clientX
-      const y = e.clientY
-      const deltaX = x - this.lastSingleTouch.x
-      const deltaX0 = x - this.singleTouchStart!.x
-      const deltaY0 = y - this.singleTouchStart!.y
-      this.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset }
-      const moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
-      const moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
-      if (deltaX !== 0 && moveX) {
-        this.props.onScroll(this.scrollComponentRef.current!.scrollLeft - deltaX)
-      }
-      if (moveY) {
-        window.scrollTo(window.scrollX, this.singleTouchStart!.screenY - deltaY0)
-      }
+      // e.preventDefault()
+      // const x = e.clientX
+      // const y = e.clientY
+      // const deltaX = x - this.lastSingleTouch.x
+      // const deltaX0 = x - this.singleTouchStart!.x
+      // const deltaY0 = y - this.singleTouchStart!.y
+      // this.lastSingleTouch = { x: x, y: y, screenY: window.pageYOffset }
+      // const moveX = Math.abs(deltaX0) * 3 > Math.abs(deltaY0)
+      // const moveY = Math.abs(deltaY0) * 3 > Math.abs(deltaX0)
+      // if (deltaX !== 0 && moveX) {
+      //   this.props.onScroll(this.scrollComponentRef.current!.scrollLeft - deltaX)
+      // }
+      // if (moveY) {
+      //   window.scrollTo(window.scrollX, this.singleTouchStart!.screenY - deltaY0)
+      // }
     }
   }
 

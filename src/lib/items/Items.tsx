@@ -100,7 +100,7 @@ export default class Items<CustomItem extends TimelineItemBase<number>> extends 
     const sortedDimensionItems = keyBy(dimensionItems, 'id')
 
     return (
-      <div className="rct-items">
+      <div className="rct-items"  id="rct-items">
         {visibleItems
           .filter((item) => sortedDimensionItems[_get(item, itemIdKey)])
           .map((item) => (

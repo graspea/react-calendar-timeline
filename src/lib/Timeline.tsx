@@ -98,6 +98,12 @@ export type ReactCalendarTimelineProps<
   itemTouchSendsClick?: boolean | undefined
   timeSteps: TimelineTimeSteps
   scrollRef?: (el: HTMLDivElement) => void
+
+  dropInRow?: (e: React.DragEvent, group: CustomGroup, transferData: string) => void,
+  dragOverRow?: (e: React.DragEvent, group: CustomGroup, transferData: string) => void
+  dragEnterRow?: (e: React.DragEvent, group: CustomGroup, transferData: string) => void
+  dragLeaveRow?: (e: React.DragEvent, group: CustomGroup, transferData: string) => void
+
   onItemDrag?(itemDragObject: OnItemDragObjectMove | OnItemDragObjectResize): void
   onItemMove?(itemId: Id, dragTime: number, newGroupOrder: number): void
   onItemResize?(itemId: Id, endTimeOrStartTime: number, edge: ResizeEdge): void
@@ -189,6 +195,11 @@ export default class ReactCalendarTimeline<
     traditionalZoom: false,
 
     horizontalLineClassNamesForGroup: null,
+
+    dropInRow: null,
+    dragOverRow: null,
+    dragEnterRow: null,
+    dragLeaveRow: null,
 
     onItemMove: null,
     onItemResize: null,
@@ -758,10 +769,11 @@ export default class ReactCalendarTimeline<
     }
   }
 
-  rows(canvasWidth: number, groupHeights: number[], groups: typeof this.props.groups) {
+  rows(canvasWidth: number, groupHeights: number[], groups: typeof this.props.groups, groupsTops: number[]) {
     return (
       <GroupRows
         groups={groups}
+        groupTops={groupsTops}
         canvasWidth={canvasWidth}
         lineCount={this.props.groups?.length || 0}
         groupHeights={groupHeights}
@@ -769,6 +781,12 @@ export default class ReactCalendarTimeline<
         onRowClick={this.handleRowClick}
         onRowDoubleClick={this.handleRowDoubleClick}
         horizontalLineClassNamesForGroup={this.props.horizontalLineClassNamesForGroup}
+
+        dropInRow={this.props.dropInRow}
+        dragOverRow={this.props.dragOverRow}
+        dragEnterRow={this.props.dragEnterRow}
+        dragLeaveRow={this.props.dragLeaveRow}
+
         onRowContextClick={this.handleScrollContextMenu}
       />
     )
@@ -1065,7 +1083,7 @@ export default class ReactCalendarTimeline<
                 >
                   <MarkerCanvas>
                     {this.columns(canvasTimeStart, canvasTimeEnd, canvasWidth, minUnit, timeSteps, height)}
-                    {this.rows(canvasWidth, groupHeights, groups)}
+                    {this.rows(canvasWidth, groupHeights, groups, groupTops)}
                     {this.items({
                       canvasTimeStart,
                       canvasTimeEnd,
